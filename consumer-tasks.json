@@ -13,7 +13,7 @@
     {
       "label": "skills: install",
       "type": "shell",
-      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git install --target ${input:target}",
+      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git install ${input:skillName} --target ${input:target}",
       "problemMatcher": []
     },
     {
@@ -24,6 +24,18 @@
     }
   ],
   "inputs": [
+    {
+      "id": "skillName",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git list --names",
+        "fieldSeparator": "|",
+        "multiselect": true,
+        "multiselectSeparator": " ",
+        "description": "Select skills to install"
+      }
+    },
     {
       "id": "target",
       "type": "pickString",

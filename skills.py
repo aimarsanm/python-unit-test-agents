@@ -131,6 +131,9 @@ def cmd_list(a):
     lock = load_lock()
     index = load_index(sync(source_of(a, lock)))
     for n, e in index.items():
+        if a.names:  # machine-readable: value|label|description, for the VS Code picker
+            print(f"{n}|{n}|v{e['version']}" + (f" (installed {lock['skills'][n]['version']})" if n in lock["skills"] else ""))
+            continue
         inst = lock["skills"].get(n)
         print(f"{n:15} {e['version']:8} {'installed ' + inst['version'] if inst else ''}")
 
@@ -230,7 +233,9 @@ def main():
     p = argparse.ArgumentParser(prog="skills")
     p.add_argument("--source", help="git URL or local path of the skills repo")
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("list").set_defaults(fn=cmd_list)
+    s = sub.add_parser("list")
+    s.add_argument("--names", action="store_true", help="one 'name|name|description' line per skill")
+    s.set_defaults(fn=cmd_list)
     s = sub.add_parser("install")
     s.add_argument("names", nargs="*", help="skill names; omit to pick from a menu")
     s.add_argument("--target", choices=list(targets()), default="claude")

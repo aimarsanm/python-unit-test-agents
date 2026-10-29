@@ -13,7 +13,7 @@
     {
       "label": "skills: install",
       "type": "shell",
-      "command": "python3 skills.py install --target ${input:target}",
+      "command": "python3 skills.py install ${input:skillName} --target ${input:target}",
       "problemMatcher": []
     },
     {
@@ -24,6 +24,18 @@
     }
   ],
   "inputs": [
+    {
+      "id": "skillName",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "python3 skills.py list --names",
+        "fieldSeparator": "|",
+        "multiselect": true,
+        "multiselectSeparator": " ",
+        "description": "Select skills to install"
+      }
+    },
     {
       "id": "target",
       "type": "pickString",
