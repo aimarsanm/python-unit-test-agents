@@ -5,13 +5,15 @@
       "label": "skills: check outdated",
       "type": "shell",
       "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git outdated",
-      "runOptions": { "runOn": "folderOpen" },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
       "problemMatcher": []
     },
     {
       "label": "skills: install",
       "type": "shell",
-      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git install ${input:skillName} --target ${input:target}",
+      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git install --target ${input:target}",
       "problemMatcher": []
     },
     {
@@ -23,17 +25,14 @@
   ],
   "inputs": [
     {
-      "id": "skillName",
+      "id": "target",
       "type": "pickString",
-      "description": "Skill to install (add new skills to this list)",
       "options": [
-        { "label": "design", "value": "design" },
-        { "label": "mocktest", "value": "mocktest" },
-        { "label": "normaltest", "value": "normaltest" },
-        { "label": "all skills", "value": "design mocktest normaltest" }
+        "claude",
+        "github"
       ],
-      "default": "design mocktest normaltest"
-    },
-    { "id": "target", "type": "pickString", "options": ["claude", "github"], "default": "claude", "description": "Target" }
+      "default": "claude",
+      "description": "Target"
+    }
   ]
 }

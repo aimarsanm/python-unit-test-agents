@@ -160,11 +160,36 @@ def do_install(name, target, source, lock, cache, index, force=False):
     print(f"+ {name} {index[name]['version']} -> {dest}")
 
 
+def ask(prompt):
+    # stdin may be the piped script itself, so read the answer from the terminal
+    try:
+        with open("/dev/tty") as tty:
+            print(prompt, end="", flush=True)
+            return tty.readline().strip()
+    except OSError:
+        return input(prompt).strip()
+
+
+def choose(index):
+    names = list(index)
+    for i, n in enumerate(names, 1):
+        print(f"  {i}) {n} {index[n]['version']}")
+    print("  a) all")
+    ans = ask("Select (numbers separated by spaces, or a): ").lower()
+    if ans in ("a", "all"):
+        return names
+    return [names[int(x) - 1] for x in ans.split() if x.isdigit() and 0 < int(x) <= len(names)]
+
+
 def cmd_install(a):
     lock = load_lock()
     source = source_of(a, lock)
-    cache = sync(source, a.names)
+    cache = sync(source)
     index = load_index(cache)
+    a.names = a.names or choose(index)
+    if not a.names:
+        sys.exit("nothing selected")
+    git("sparse-checkout", "add", *[f"skills/{n}" for n in a.names if n in index], cwd=cache)
     for n in a.names:
         do_install(n, a.target, source, lock, cache, index, a.force)
     save_lock(lock)
@@ -207,7 +232,7 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     s = sub.add_parser("install")
-    s.add_argument("names", nargs="+")
+    s.add_argument("names", nargs="*", help="skill names; omit to pick from a menu")
     s.add_argument("--target", choices=list(targets()), default="claude")
     s.add_argument("--force", action="store_true")
     s.set_defaults(fn=cmd_install)

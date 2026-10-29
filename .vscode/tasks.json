@@ -5,13 +5,15 @@
       "label": "skills: check outdated",
       "type": "shell",
       "command": "python3 skills.py outdated",
-      "runOptions": { "runOn": "folderOpen" },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
       "problemMatcher": []
     },
     {
       "label": "skills: install",
       "type": "shell",
-      "command": "python3 skills.py install ${input:skillName} --target ${input:target}",
+      "command": "python3 skills.py install --target ${input:target}",
       "problemMatcher": []
     },
     {
@@ -23,17 +25,14 @@
   ],
   "inputs": [
     {
-      "id": "skillName",
+      "id": "target",
       "type": "pickString",
-      "description": "Skill to install (add new skills to this list)",
       "options": [
-        { "label": "design", "value": "design" },
-        { "label": "mocktest", "value": "mocktest" },
-        { "label": "normaltest", "value": "normaltest" },
-        { "label": "all skills", "value": "design mocktest normaltest" }
+        "claude",
+        "github"
       ],
-      "default": "design mocktest normaltest"
-    },
-    { "id": "target", "type": "pickString", "options": ["claude", "github"], "default": "claude", "description": "Target" }
+      "default": "claude",
+      "description": "Target"
+    }
   ]
 }
