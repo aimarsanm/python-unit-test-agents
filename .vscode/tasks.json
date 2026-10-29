@@ -22,7 +22,18 @@
     }
   ],
   "inputs": [
-    { "id": "skillName", "type": "promptString", "description": "Skill name(s)" },
+    {
+      "id": "skillName",
+      "type": "pickString",
+      "description": "Skill to install (add new skills to this list)",
+      "options": [
+        { "label": "design", "value": "design" },
+        { "label": "mocktest", "value": "mocktest" },
+        { "label": "normaltest", "value": "normaltest" },
+        { "label": "all skills", "value": "design mocktest normaltest" }
+      ],
+      "default": "design mocktest normaltest"
+    },
     { "id": "target", "type": "pickString", "options": ["claude", "github"], "default": "claude", "description": "Target" }
   ]
 }
