@@ -14,7 +14,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parent if "__file__" in globals() else Path.cwd()
+DEFAULT_TARGETS = {"claude": ".claude/skills", "github": ".github/skills"}
 LOCK = ".skills-lock.json"
 CACHE_ROOT = Path(os.environ.get("SKILLS_CACHE", Path.home() / ".cache" / "skills"))
 
@@ -122,7 +123,8 @@ def load_index(cache):
 
 
 def targets():
-    return json.loads((HERE / "targets.json").read_text())
+    f = HERE / "targets.json"  # absent when the script is piped in from a URL
+    return json.loads(f.read_text()) if f.exists() else DEFAULT_TARGETS
 
 
 def cmd_list(a):

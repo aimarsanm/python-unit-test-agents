@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "skills: check outdated",
+      "type": "shell",
+      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git outdated",
+      "runOptions": { "runOn": "folderOpen" },
+      "problemMatcher": []
+    },
+    {
+      "label": "skills: install",
+      "type": "shell",
+      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git install ${input:skillName} --target ${input:target}",
+      "problemMatcher": []
+    },
+    {
+      "label": "skills: update all",
+      "type": "shell",
+      "command": "curl -fsSL https://raw.githubusercontent.com/aimarsanm/python-unit-test-agents/main/skills.py | python3 - --source https://github.com/aimarsanm/python-unit-test-agents.git update --all",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    { "id": "skillName", "type": "promptString", "description": "Skill name(s), space separated" },
+    { "id": "target", "type": "pickString", "options": ["claude", "github"], "default": "claude", "description": "Target" }
+  ]
+}
