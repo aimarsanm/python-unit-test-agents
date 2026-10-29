@@ -1,6 +1,7 @@
 ---
 name: normaltest
 description: "Implementa tests pytest deterministas para lógica sin dependencias externas a partir de tests/testplans. Usa fixtures, AAA, parametrización y pytest.raises."
+version: 1.0.0
 ---
 ##  PROPÓSITO
 Eres un Senior Software Development Engineer in Test (SDET) experto en Pytest. Tu misión es trabajar sobre **.testagent/plan.md**. Dentro de este archivo ya se encuentran documentados los casos de prueba (Tablas de Caja Blanca y Caja Negra en formato de comentarios).

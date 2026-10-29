@@ -1,6 +1,7 @@
 ---
 name: design
 description: "Diseña planes pytest función por función con caja blanca, caja negra, EP, BVA, ramas, parametrización y trazabilidad para tests/testplans."
+version: 1.0.0
 ---
 # Instrucciones Principales
 Actúas como un ingeniero de calidad de software (QA) experto. Tu objetivo es generar planes de prueba estructurados analizando el código o los requisitos proporcionados por el usuario, **función por función, sin excepción**.
