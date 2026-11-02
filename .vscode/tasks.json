@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 { 
 "version": "2.0.0", 
 "tasks": [ 
@@ -25,55 +24,3 @@
     } 
 ] 
 } 
-=======
-{
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "skills: check outdated",
-      "type": "shell",
-      "command": "python3 skills.py outdated",
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "skills: install",
-      "type": "shell",
-      "command": "python3 skills.py install ${input:skillName} --target ${input:target}",
-      "problemMatcher": []
-    },
-    {
-      "label": "skills: update all",
-      "type": "shell",
-      "command": "python3 skills.py update --all",
-      "problemMatcher": []
-    }
-  ],
-  "inputs": [
-    {
-      "id": "skillName",
-      "type": "command",
-      "command": "shellCommand.execute",
-      "args": {
-        "command": "python3 skills.py list --names",
-        "fieldSeparator": "|",
-        "multiselect": true,
-        "multiselectSeparator": " ",
-        "description": "Select skills to install"
-      }
-    },
-    {
-      "id": "target",
-      "type": "pickString",
-      "options": [
-        "claude",
-        "github"
-      ],
-      "default": "claude",
-      "description": "Target"
-    }
-  ]
-}
->>>>>>> aba35b8b20d44343a0747c595f67b48045a026f9
