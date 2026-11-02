@@ -2,9 +2,39 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Descargar agentes según respuestas Sí/No",
-      "type": "shell",
-      "command": "$downloads = @(); if ('${input:quieresAgents}' -eq 'Sí') { $downloads += @{Source='.github/agents'; Destination='.github/agents'} }; if ('${input:quieresSkills}' -eq 'Sí') { $downloads += @{Source='skills'; Destination='.github/skills'} }; if ('${input:quieresReadme}' -eq 'Sí') { $downloads += @{Source='README.md'; Destination='.'} }; if ($downloads.Count -eq 0) { Write-Host 'No has seleccionado nada para descargar.'; exit 0 }; git fetch https://github.com/aimarsanm/python-unit-test-agents.git main; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; $temp = Join-Path ([System.IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString()); New-Item -ItemType Directory -Path $temp | Out-Null; try { foreach ($download in $downloads) { $archive = Join-Path $temp 'download.zip'; git archive --format=zip --output=$archive FETCH_HEAD -- $download.Source; if ($LASTEXITCODE -ne 0) { throw 'No se pudo crear el archivo ZIP desde el repositorio.' }; $expanded = Join-Path $temp 'expanded'; Expand-Archive -LiteralPath $archive -DestinationPath $expanded -Force; $sourcePath = Join-Path $expanded $download.Source; if (-not (Test-Path -LiteralPath $sourcePath)) { throw \"No se encontró la ruta solicitada: $($download.Source)\" }; if ($download.Destination -ne '.') { New-Item -ItemType Directory -Path $download.Destination -Force | Out-Null }; if (Test-Path -LiteralPath $sourcePath -PathType Container) { Copy-Item -Path (Join-Path $sourcePath '*') -Destination $download.Destination -Recurse -Force } else { Copy-Item -LiteralPath $sourcePath -Destination $download.Destination -Force }; Remove-Item -LiteralPath $expanded -Recurse -Force; Remove-Item -LiteralPath $archive -Force } } finally { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }",
+      "label": "Descargar según respuestas Sí/No",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\.vscode\\manage-components.ps1",
+        "-Mode",
+        "download",
+        "-WantsAgents",
+        "${input:quieresAgents}",
+        "-WantsSkills",
+        "${input:quieresSkills}",
+        "-WantsReadme",
+        "${input:quieresReadme}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Comprobar actualizaciones de componentes",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\.vscode\\manage-components.ps1",
+        "-Mode",
+        "update"
+      ],
       "problemMatcher": [],
       "runOptions": {
         "runOn": "folderOpen"
