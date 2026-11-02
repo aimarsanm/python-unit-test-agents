@@ -1,26 +1,46 @@
-{ 
-"version": "2.0.0", 
-"tasks": [ 
-    { 
-    "label": "Descargar carpeta seleccionada", 
-    "type": "shell", 
-    "command": "$selected='${input:carpetaADescargar}'; $downloads=@(); if ($selected -eq '.github/agents') { $downloads += @{Source='.github/agents'; Destination='.github/agents'; Strip=2} } elseif ($selected -eq '.github/skills') { $downloads += @{Source='skills'; Destination='.github/skills'; Strip=1} } elseif ($selected -eq 'agents y skills') { $downloads += @{Source='.github/agents'; Destination='.github/agents'; Strip=2}; $downloads += @{Source='skills'; Destination='.github/skills'; Strip=1} } else { $downloads += @{Source='README.md'; Destination='.'; Strip=0} }; git fetch https://github.com/aimarsanm/python-unit-test-agents.git main; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; foreach ($download in $downloads) { $source=$download.Source; $destination=$download.Destination; $strip=$download.Strip; if ($destination -ne '.') { New-Item -ItemType Directory -Path $destination -Force | Out-Null }; $treePath='FETCH_HEAD:' + $source; git cat-file -e $treePath; if ($LASTEXITCODE -ne 0) { Write-Error ('La ruta ' + $source + ' no existe en el repositorio remoto.'); exit 1 }; git archive FETCH_HEAD -- $source | tar -x --strip-components=$strip -C $destination }", 
-    "problemMatcher": [], 
-    "runOptions": { "runOn": "folderOpen" }
-    } 
-],
-"inputs": [ 
-    { 
-    "id": "carpetaADescargar",
-    "type": "pickString",
-    "description": "¿Qué carpeta deseas descargar?",
-    "options": [ 
-        ".github/agents", 
-        ".github/skills", 
-        "agents y skills", 
-        "README.md" 
-    ], 
-    "default": ".github/agents" 
-    } 
-] 
-} 
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Descargar según respuestas Sí/No",
+      "type": "shell",
+      "command": "$downloads = @(); if ('${input:quieresAgents}' -eq 'Sí') { $downloads += @{Source='.github/agents'; Destination='.github/agents'} }; if ('${input:quieresSkills}' -eq 'Sí') { $downloads += @{Source='skills'; Destination='.github/skills'} }; if ('${input:quieresReadme}' -eq 'Sí') { $downloads += @{Source='README.md'; Destination='.'} }; if ($downloads.Count -eq 0) { Write-Host 'No has seleccionado nada para descargar.'; exit 0 }; git fetch https://github.com/aimarsanm/python-unit-test-agents.git main; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; $temp = Join-Path ([System.IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString()); New-Item -ItemType Directory -Path $temp | Out-Null; try { foreach ($download in $downloads) { $archive = Join-Path $temp 'download.zip'; git archive --format=zip --output=$archive FETCH_HEAD -- $download.Source; if ($LASTEXITCODE -ne 0) { throw 'No se pudo crear el archivo ZIP desde el repositorio.' }; $expanded = Join-Path $temp 'expanded'; Expand-Archive -LiteralPath $archive -DestinationPath $expanded -Force; $sourcePath = Join-Path $expanded $download.Source; if (-not (Test-Path -LiteralPath $sourcePath)) { throw \"No se encontró la ruta solicitada: $($download.Source)\" }; if ($download.Destination -ne '.') { New-Item -ItemType Directory -Path $download.Destination -Force | Out-Null }; if (Test-Path -LiteralPath $sourcePath -PathType Container) { Copy-Item -Path (Join-Path $sourcePath '*') -Destination $download.Destination -Recurse -Force } else { Copy-Item -LiteralPath $sourcePath -Destination $download.Destination -Force }; Remove-Item -LiteralPath $expanded -Recurse -Force; Remove-Item -LiteralPath $archive -Force } } finally { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "quieresAgents",
+      "type": "pickString",
+      "description": "¿Deseas descargar los Agentes (.github/agents)?",
+      "options": [
+        "Sí",
+        "No"
+      ],
+      "default": "Sí"
+    },
+    {
+      "id": "quieresSkills",
+      "type": "pickString",
+      "description": "¿Deseas descargar las Skills (.github/skills)?",
+      "options": [
+        "Sí",
+        "No"
+      ],
+      "default": "Sí"
+    },
+    {
+      "id": "quieresReadme",
+      "type": "pickString",
+      "description": "¿Deseas descargar el README.md?",
+      "options": [
+        "Sí",
+        "No"
+      ],
+      "default": "No"
+    }
+  ]
+}
