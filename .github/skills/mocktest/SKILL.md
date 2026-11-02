@@ -1,6 +1,7 @@
 ---
 name: mocktest
 description: "Implementa tests pytest aislados con pytest-mock para BD, HTTP, I/O, tiempo, entorno y servicios externos. Usar desde implementer cuando normaltest no sea aplicable."
+version: 1.0.0
 ---
 
 # Experto en Simulación de Dependencias (Pytest Mocking)

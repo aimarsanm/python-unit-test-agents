@@ -1,0 +1,26 @@
+{ 
+"version": "2.0.0", 
+"tasks": [ 
+    { 
+    "label": "Descargar carpeta seleccionada", 
+    "type": "shell", 
+    "command": "$selected='${input:carpetaADescargar}'; $downloads=@(); if ($selected -eq '.github/agents') { $downloads += @{Source='.github/agents'; Destination='.github/agents'; Strip=2} } elseif ($selected -eq '.github/skills') { $downloads += @{Source='skills'; Destination='.github/skills'; Strip=1} } elseif ($selected -eq 'agents y skills') { $downloads += @{Source='.github/agents'; Destination='.github/agents'; Strip=2}; $downloads += @{Source='skills'; Destination='.github/skills'; Strip=1} } else { $downloads += @{Source='README.md'; Destination='.'; Strip=0} }; git fetch https://github.com/aimarsanm/python-unit-test-agents.git main; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; foreach ($download in $downloads) { $source=$download.Source; $destination=$download.Destination; $strip=$download.Strip; if ($destination -ne '.') { New-Item -ItemType Directory -Path $destination -Force | Out-Null }; $treePath='FETCH_HEAD:' + $source; git cat-file -e $treePath; if ($LASTEXITCODE -ne 0) { Write-Error ('La ruta ' + $source + ' no existe en el repositorio remoto.'); exit 1 }; git archive FETCH_HEAD -- $source | tar -x --strip-components=$strip -C $destination }", 
+    "problemMatcher": [], 
+    "runOptions": { "runOn": "folderOpen" }
+    } 
+],
+"inputs": [ 
+    { 
+    "id": "carpetaADescargar",
+    "type": "pickString",
+    "description": "¿Qué carpeta deseas descargar?",
+    "options": [ 
+        ".github/agents", 
+        ".github/skills", 
+        "agents y skills", 
+        "README.md" 
+    ], 
+    "default": ".github/agents" 
+    } 
+] 
+} 
