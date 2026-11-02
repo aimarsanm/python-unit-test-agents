@@ -1,0 +1,17 @@
+{
+  "design": {
+    "version": "1.0.0",
+    "path": "skills/design",
+    "tree": "555232cdb1af733ff26dac3a206efc0693337705"
+  },
+  "mocktest": {
+    "version": "1.0.0",
+    "path": "skills/mocktest",
+    "tree": "b1996604f9bbfcd5beb42fdc7b8ecff2d4a11be5"
+  },
+  "normaltest": {
+    "version": "1.0.0",
+    "path": "skills/normaltest",
+    "tree": "50a472f62297e60baa1af5c3c1849ddffe7516cd"
+  }
+}
