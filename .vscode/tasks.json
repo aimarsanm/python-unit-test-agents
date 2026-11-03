@@ -10,7 +10,7 @@
         "-ExecutionPolicy",
         "Bypass",
         "-File",
-        "${workspaceFolder}\\.vscode\\manage-components.ps1",
+        "${workspaceFolder}/.vscode/manage-components.ps1",
         "-Mode",
         "download",
         "-WantsAgents",
@@ -31,7 +31,7 @@
         "-ExecutionPolicy",
         "Bypass",
         "-File",
-        "${workspaceFolder}\\.vscode\\manage-components.ps1",
+        "${workspaceFolder}/.vscode/manage-components.ps1",
         "-Mode",
         "update"
       ],

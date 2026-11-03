@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Descargar según respuestas Sí/No",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/.vscode/manage-components-linux.sh",
+        "--mode", "download",
+        "--wants-agents", "${input:quieresAgents}",
+        "--wants-skills", "${input:quieresSkills}",
+        "--wants-readme", "${input:quieresReadme}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Comprobar actualizaciones de componentes",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/.vscode/manage-components-linux.sh",
+        "--mode", "update"
+      ],
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "quieresAgents",
+      "type": "pickString",
+      "description": "¿Deseas descargar los Agentes (.github/agents)?",
+      "options": ["Sí", "No"],
+      "default": "Sí"
+    },
+    {
+      "id": "quieresSkills",
+      "type": "pickString",
+      "description": "¿Deseas descargar las Skills (.github/skills)?",
+      "options": ["Sí", "No"],
+      "default": "Sí"
+    },
+    {
+      "id": "quieresReadme",
+      "type": "pickString",
+      "description": "¿Deseas descargar el README.md?",
+      "options": ["Sí", "No"],
+      "default": "No"
+    }
+  ]
+}

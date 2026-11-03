@@ -68,14 +68,8 @@ try {
         exit 0
     }
     if ($Mode -eq 'update') {
-        Add-Type -AssemblyName System.Windows.Forms
-        $wantsUpdate = [System.Windows.Forms.MessageBox]::Show(
-            '¿Deseas actualizar los componentes?',
-            'Actualización de componentes',
-            [System.Windows.Forms.MessageBoxButtons]::YesNo,
-            [System.Windows.Forms.MessageBoxIcon]::Question
-        )
-        if ($wantsUpdate -ne [System.Windows.Forms.DialogResult]::Yes) {
+        $confirmation = Read-Host '¿Deseas actualizar los componentes? (Sí/No)'
+        if ($confirmation -notmatch '^(?i:s[ií]|y|yes)$') {
             Write-Host 'Actualización omitida por el usuario.'
             exit 0
         }
