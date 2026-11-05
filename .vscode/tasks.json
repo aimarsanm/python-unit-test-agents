@@ -3,45 +3,83 @@
   "tasks": [
     {
       "label": "Descargar según respuestas Sí/No",
-      "type": "process",
-      "command": "pwsh",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}/.vscode/manage-components.ps1",
-        "-Mode",
-        "download",
-        "-WantsAgents",
-        "${input:quieresAgents}",
-        "-WantsSkills",
-        "${input:quieresSkills}",
-        "-WantsReadme",
-        "${input:quieresReadme}"
-      ],
+      "type": "shell",
+      "windows": {
+        "command": "if ('${input:sistema}' -eq 'Linux') { bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode download --wants-agents '${input:quieresAgents}' --wants-skills '${input:quieresSkills}' --wants-readme '${input:quieresReadme}' } else { pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode download -WantsAgents '${input:quieresAgents}' -WantsSkills '${input:quieresSkills}' -WantsReadme '${input:quieresReadme}' }",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": ["-NoProfile", "-Command"]
+          }
+        }
+      },
+      "linux": {
+        "command": "if [ '${input:sistema}' = 'Linux' ]; then bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode download --wants-agents '${input:quieresAgents}' --wants-skills '${input:quieresSkills}' --wants-readme '${input:quieresReadme}'; else pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode download -WantsAgents '${input:quieresAgents}' -WantsSkills '${input:quieresSkills}' -WantsReadme '${input:quieresReadme}'; fi",
+        "options": {
+          "shell": {
+            "executable": "bash",
+            "args": ["-c"]
+          }
+        }
+      },
+      "osx": {
+        "command": "if [ '${input:sistema}' = 'Linux' ]; then bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode download --wants-agents '${input:quieresAgents}' --wants-skills '${input:quieresSkills}' --wants-readme '${input:quieresReadme}'; else pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode download -WantsAgents '${input:quieresAgents}' -WantsSkills '${input:quieresSkills}' -WantsReadme '${input:quieresReadme}'; fi",
+        "options": {
+          "shell": {
+            "executable": "bash",
+            "args": ["-c"]
+          }
+        }
+      },
       "problemMatcher": []
     },
     {
       "label": "Comprobar actualizaciones de componentes",
-      "type": "process",
-      "command": "pwsh",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}/.vscode/manage-components.ps1",
-        "-Mode",
-        "update"
-      ],
-      "problemMatcher": [],
+      "type": "shell",
       "runOptions": {
         "runOn": "folderOpen"
-      }
+      },
+      "windows": {
+        "command": "if ('${input:sistema}' -eq 'Linux') { bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode update } else { pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode update }",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": ["-NoProfile", "-Command"]
+          }
+        }
+      },
+      "linux": {
+        "command": "if [ '${input:sistema}' = 'Linux' ]; then bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode update; else pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode update; fi",
+        "options": {
+          "shell": {
+            "executable": "bash",
+            "args": ["-c"]
+          }
+        }
+      },
+      "osx": {
+        "command": "if [ '${input:sistema}' = 'Linux' ]; then bash '${workspaceFolder}/.vscode/manage-components-linux.sh' --mode update; else pwsh -NoProfile -ExecutionPolicy Bypass -File '${workspaceFolder}/.vscode/manage-components.ps1' -Mode update; fi",
+        "options": {
+          "shell": {
+            "executable": "bash",
+            "args": ["-c"]
+          }
+        }
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
+    {
+      "id": "sistema",
+      "type": "pickString",
+      "description": "¿Qué sistema operativo usas?",
+      "options": [
+        "Windows",
+        "Linux"
+      ],
+      "default": "Windows"
+    },
     {
       "id": "quieresAgents",
       "type": "pickString",
