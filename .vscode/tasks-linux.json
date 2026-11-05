@@ -4,28 +4,68 @@
     {
       "label": "Descargar según respuestas Sí/No",
       "type": "process",
-      "command": "bash",
-      "args": [
-        "${workspaceFolder}/.vscode/manage-components-linux.sh",
-        "--mode", "download",
-        "--wants-agents", "${input:quieresAgents}",
-        "--wants-skills", "${input:quieresSkills}",
-        "--wants-readme", "${input:quieresReadme}"
-      ],
+      "linux": {
+        "command": "bash",
+        "args": [
+          "${workspaceFolder}/.vscode/manage-components-linux.sh",
+          "--mode", "download",
+          "--wants-agents", "${input:quieresAgents}",
+          "--wants-skills", "${input:quieresSkills}",
+          "--wants-readme", "${input:quieresReadme}"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "${workspaceFolder}/.vscode/manage-components-linux.sh",
+          "--mode", "download",
+          "--wants-agents", "${input:quieresAgents}",
+          "--wants-skills", "${input:quieresSkills}",
+          "--wants-readme", "${input:quieresReadme}"
+        ]
+      },
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-ExecutionPolicy", "Bypass",
+          "-File", "${workspaceFolder}/.vscode/manage-components-windows.ps1",
+          "-Mode", "download",
+          "-WantsAgents", "${input:quieresAgents}",
+          "-WantsSkills", "${input:quieresSkills}",
+          "-WantsReadme", "${input:quieresReadme}"
+        ]
+      },
       "problemMatcher": []
     },
     {
       "label": "Comprobar actualizaciones de componentes",
       "type": "process",
-      "command": "bash",
-      "args": [
-        "${workspaceFolder}/.vscode/manage-components-linux.sh",
-        "--mode", "update"
-      ],
-      "problemMatcher": [],
       "runOptions": {
         "runOn": "folderOpen"
-      }
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "${workspaceFolder}/.vscode/manage-components-linux.sh",
+          "--mode", "update"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "${workspaceFolder}/.vscode/manage-components-linux.sh",
+          "--mode", "update"
+        ]
+      },
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-ExecutionPolicy", "Bypass",
+          "-File", "${workspaceFolder}/.vscode/manage-components-windows.ps1",
+          "-Mode", "update"
+        ]
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
